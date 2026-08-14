@@ -1,0 +1,170 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 18
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -304,
+        -48
+      ],
+      "id": "8e7d8bb2-e5f0-45aa-901a-67049001e597",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "Eres un agente senior de reclutamiento tecnológico e inteligencia de mercado en Chile. Tu tarea es realizar un rastreo web eficiente utilizando la herramienta Tavily para recopilar oportunidades reales de práctica y novedades tecnológicas de impacto.\n\n---\n### PROTOCOLO DE BÚSQUEDA Y LÍMITE DE ITERACIONES (Obligatorio)\n1. LÍMITE DE EJECUCIÓN:\n   - No realices más de 4 consultas a Tavily en total. No superes bajo ninguna circunstancia las 24 iteraciones internas de razonamiento.\n   - Si tras revisar unas 20 ofertas acumuladas en los resultados no encuentras ninguna que cumpla estrictamente los filtros, concluye la búsqueda y reporta que no hubo vacantes válidas hoy.\n\n2. REGLA DE ANTIGÜEDAD (Estricta):\n   - SOLO debes incluir ofertas que hayan sido publicadas o actualizadas en los ÚLTIMOS 4 DÍAS.\n   - Descarta inmediatamente ofertas con más de 4 días de antigüedad o cuya fecha no esté clara.\n\n3. FUENTES Y ROTACIÓN:\n   - Prioriza: FirstJob.me, Chiletrabajos.cl, Trabajando.com, Laborum o bolsas de empleo de universidades/institutos de Ñuble y Biobío.\n   - Si una fuente no arroja resultados recientes, pasa a otra distinta de la lista en lugar de insistir en la misma.\n\n4. REGLA DE EXTRACCIÓN TOTAL:\n   - Extrae y lista TODAS las ofertas válidas que encuentres en los resultados analizados. No te limites a 1 o 2 si hay más disponibles.\n\n---\n### TAREA 1: OFERTAS DE PRÁCTICA PROFESIONAL\nPerfiles de interés (cualquier stack técnico):\n- Desarrollo de Software (Web, Móvil, Backend, Frontend, Fullstack).\n- Soporte de software / QA / Ingeniería de Soporte (Troubleshooting).\n- AI Engineering / Desarrollo con IA / LLMs.\n- Data Engineering / Data Analysis / Data Science.\n\nFiltros Geográficos y Modalidades (Estricto orden de prioridad):\n1. Prioridad 1:\n   - Santiago: modalidad REMOTA (Home Office / 100% online).\n   - Chillán / Chillán Viejo: modalidad PRESENCIAL o Semipresencial.\n2. Prioridad 2:\n   - Concepción / Gran Concepción: modalidad HÍBRIDA o PRESENCIAL.\n   - Resto de la Región de Ñuble (San Carlos, Bulnes, etc.): modalidad PRESENCIAL.\n\nFiltro Académico y de Funciones (Obligatorio):\nEl cargo DEBE incluir contacto directo con CÓDIGO (programación, scripting, SQL, automatización, análisis de datos, etc.). Descarta soporte TI que sea exclusivamente de hardware/redes sin software, ya que es requisito de convalidación académica para el Instituto Profesional Santo Tomás Chillán.\n\n*Regla extra:* Descarta ofertas senior, empleos que exijan más de 2 años de experiencia o presencialidad en Santiago/otras regiones no listadas.\n\n---\n### TAREA 2: TECNOLOGÍAS EMERGENTES (Tech News)\nRastrea rápidamente en medios técnicos (Hacker News, GitHub Trending, blogs de ingeniería) 2 novedades de los últimos 4 días sobre:\n- Herramientas/frameworks para desarrollo de software con agentes de IA.\n- Innovaciones en arquitecturas de datos, Data Science y MLOps.\n- Avances en soporte de software, QA o tooling para desarrolladores.\n\n---\n### FORMATO DE SALIDA (Telegram HTML)\nUsa únicamente etiquetas HTML estándar (<b>, <i>, <a>). Entrega el reporte con esta estructura:\n\n🎯 <b>[OFERTA DE PRÁCTICA]</b>\n• <b>Puesto:</b> [Título del cargo]\n• <b>Empresa:</b> [Nombre de la entidad]\n• <b>Portal / Fuente:</b> [Ej: FirstJob / Chiletrabajos]\n• <b>Ubicación &amp; Modalidad:</b> [Ej: Chillán (Presencial) / Santiago (Remoto)]\n• <b>Detalle clave:</b> [Requisitos técnicos y confirmación de uso de código]\n• <b>Publicado hace:</b> [Ej: 2 días]\n• <b>Enlace:</b> <a href=\"[URL directa limpia]\">Postular aquí</a>\n\n<i>(Repetir el bloque de arriba por cada oferta válida encontrada)</i>\n\n---\n\n🚀 <b>[TECNOLOGÍA EMERGENTE]</b>\n• <b>Titular:</b> [Título de la novedad]\n• <b>Área:</b> [Ej: AI Engineering / Data Science]\n• <b>Impacto técnico:</b> [Explicación concisa en 2 líneas]\n• <b>Referencia:</b> <a href=\"[URL limpia]\">Leer más</a>\n\n<i>Nota: Si hoy no se detectan ofertas que cumplan todos los filtros, escribe bajo el marcador de práctica: \"No se encontraron ofertas recientes que cumplan los criterios geográficos y académicos en este ciclo de búsqueda.\"</i>",
+        "options": {
+          "maxIterations": 25
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -64,
+        -48
+      ],
+      "id": "21ae63ed-7af4-4a2a-9a90-6ada90b999dd",
+      "name": "AI Agent",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.5-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        -160,
+        144
+      ],
+      "id": "b748d518-898f-430e-a161-5a515017acd5",
+      "name": "Google Gemini Chat Model",
+      "notesInFlow": false,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "ggFw3SdZerOYrIfb",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "5641169118",
+        "text": "={{ $json.output }}",
+        "additionalFields": {
+          "parse_mode": "HTML"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        304,
+        -48
+      ],
+      "id": "e07378a9-a072-41b5-9bee-634f6680d10e",
+      "name": "Send a text message",
+      "webhookId": "b2044956-d17a-451d-b1ff-9060fedc5fe6",
+      "credentials": {
+        "telegramApi": {
+          "id": "Uyo6E8S5ttQbYkNG",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "query": "={{ $fromAI('query', 'The search query to look up on the web') }}",
+        "options": {}
+      },
+      "type": "@tavily/n8n-nodes-tavily.tavilyTool",
+      "typeVersion": 1,
+      "position": [
+        128,
+        160
+      ],
+      "id": "729c6d50-4651-4c7a-b4f2-68a6c27397d1",
+      "name": "Search in Tavily",
+      "credentials": {
+        "tavilyApi": {
+          "id": "MN6WZGTAogKV8o09",
+          "name": "Tavily account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search in Tavily": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "e1bae5d2-f3f2-4fd3-85d3-c95f7383f9dc",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "570af8be93924162795c69604f70de3dcfacb51f23ee2c3cf504e63495d9ef24"
+  },
+  "nodeGroups": [],
+  "id": "jMjqGKeN9uiQ5T6I",
+  "tags": []
+}
