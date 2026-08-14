@@ -20,4 +20,8 @@ Pipeline de automatización de inteligencia laboral y vigilancia tecnológica di
 3. Configurar las credenciales de Gemini, Tavily y Telegram.
 4. Activar el workflow.
 
-![Arquitectura del Workflow](screenshots/architecture_diagram.png)
+## 📱 Demostración del Resultado
+
+| Flujo en n8n | Alerta Entregada en Telegram |
+| :---: | :---: |
+| ![Workflow n8n](screenshots/architecture_diagram.png) | ![Mensaje Telegram](screenshots/telegram_output.jpeg) |
