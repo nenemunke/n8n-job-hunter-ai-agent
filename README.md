@@ -19,3 +19,5 @@ Pipeline de automatización de inteligencia laboral y vigilancia tecnológica di
 2. En n8n: Menú superior -> `Import from File` -> Seleccionar `workflows/job_market_ai_agent.json`.
 3. Configurar las credenciales de Gemini, Tavily y Telegram.
 4. Activar el workflow.
+
+![Arquitectura del Workflow](screenshots/architecture_diagram.png)
